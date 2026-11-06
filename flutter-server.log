@@ -1,2 +1,17 @@
 Launching lib\main.dart on Chrome in debug mode...
-Waiting for connection from debug service on Chrome...          
+Waiting for connection from debug service on Chrome...            127.9s
+
+Flutter run key commands.
+r Hot reload. 
+R Hot restart.
+h List all available interactive commands.
+d Detach (terminate "flutter run" but leave application running).
+c Clear the screen
+q Quit (terminate the application on the device).
+
+This app is linked to the debug service: ws://127.0.0.1:59035/DUkNp2sndxc=/ws
+Debug service listening on ws://127.0.0.1:59035/DUkNp2sndxc=/ws
+A Dart VM Service on Chrome is available at: http://127.0.0.1:59035/DUkNp2sndxc=
+The Flutter DevTools debugger and profiler on Chrome is available at: http://127.0.0.1:59035/DUkNp2sndxc=/devtools/?uri=ws://127.0.0.1:59035/DUkNp2sndxc=/ws
+Starting application from main method in: org-dartlang-app:///web_entrypoint.dart.
+Could not find a set of Noto fonts to display all missing characters. Please add a font asset for the missing characters. See: https://docs.flutter.dev/cookbook/design/fonts
