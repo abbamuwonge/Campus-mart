@@ -15,3 +15,4 @@ A Dart VM Service on Chrome is available at: http://127.0.0.1:59035/DUkNp2sndxc=
 The Flutter DevTools debugger and profiler on Chrome is available at: http://127.0.0.1:59035/DUkNp2sndxc=/devtools/?uri=ws://127.0.0.1:59035/DUkNp2sndxc=/ws
 Starting application from main method in: org-dartlang-app:///web_entrypoint.dart.
 Could not find a set of Noto fonts to display all missing characters. Please add a font asset for the missing characters. See: https://docs.flutter.dev/cookbook/design/fonts
+Application finished.
