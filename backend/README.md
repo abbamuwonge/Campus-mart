@@ -1,7 +1,6 @@
-# CampusMart backend (FastAPI)
+﻿# CampusMart backend (FastAPI)
 
-REST API for the CampusMart student marketplace. It returns JSON over HTTP, stores data in SQLite
-(SQLAlchemy) and protects its endpoints with bcrypt-hashed passwords and JWT tokens.
+REST API for the CampusMart student marketplace. It returns JSON over HTTP, uses SQLAlchemy with SQLite for local development and PostgreSQL for production, and protects endpoints with bcrypt-hashed passwords and JWT tokens.
 
 ## Run it
 
@@ -22,9 +21,8 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 - Interactive API docs (Swagger): http://127.0.0.1:8000/docs
 - The database file `campusmart.db` and the tables are created automatically on the first start.
-- The 9 categories and one admin account are created automatically:
-  `admin@campusmart.ug` / `Admin12345`. Change them with the environment variables
-  `ADMIN_EMAIL` and `ADMIN_PASSWORD` before the first start.
+- The 9 categories and an administrator account are created automatically when needed.
+  Configure `ADMIN_EMAIL` and `ADMIN_PASSWORD` through environment variables before the first start.
 
 ### Calling the API from the Flutter app
 
@@ -163,3 +161,5 @@ backend/
   uploads/           saved photos (not committed)
   requirements.txt
 ```
+
+
