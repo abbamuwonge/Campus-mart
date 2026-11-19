@@ -1,82 +1,248 @@
-# CampusMart — Student Marketplace
+# CampusMart – Student Marketplace
 
-## 1. Project Overview
+**Islamic Call University College · Mobile Application & Design · Year 3, Semester 1 (Weekend)**
+Capstone project · Demo: 23 November 2026
 
-CampusMart is a mobile marketplace application designed to help university students buy and sell items within the student community. These items include textbooks, electronics, and school supplies.
+CampusMart is a mobile app where students buy and sell items within and across university communities (*Buy · Sell · Connect*): textbooks, phones, laptops, hostel items, clothes, stationery and services such as printing and tutoring. It replaces scattered WhatsApp posts and notice boards with one searchable place that only registered students use.
 
-The project is being developed as a group assignment for the Mobile Application and Design course. It aims to provide students with a convenient platform to browse items, post items for sale, save favorites, communicate with other students, and manage orders.
+---
 
-## 2. Problem Statement
+## Group members
 
-University students may find it difficult to find affordable learning materials and other useful items from fellow students. At the same time, students who want to sell items they no longer need may lack a convenient way to reach potential buyers.
+| Name | Reg No | Course | Role |
+| --- | --- | --- | --- |
+| Kamara Yusuf | 241-22302-7631 | BIT Weekend | Backend lead (API, database, run instructions) |
+| Muwonge Abbasi | 241-21301-7261 | BCS Weekend | Flutter lead (screens, navigation, forms) |
+| Waziri Aslam | 241-22302-7521 | BIT Weekend | Analyst and integration lead (analysis, ERD, API docs, testing, README) |
 
-CampusMart aims to address these challenges by providing a central marketplace where students can discover items and connect with buyers or sellers.
+All three members write code and commit to this repository every week.
 
-## 3. Project Objectives
+---
 
-- Provide a platform for students to buy and sell items.
-- Allow users to register, log in, and manage their profiles.
-- Enable students to browse, search, and filter available items.
-- Organize items into categories.
-- Allow users to save items to their favorites.
-- Support communication between buyers and sellers.
-- Allow users to manage listings and orders.
+## The problem and our solution
 
-## 4. Planned Features
+Students trade items through class WhatsApp groups and notice boards, where posts are hard to find later, cannot be searched by price, and give no way to know whether the seller belongs to the student community. General marketplaces such as Jiji and ZiBuy serve everyone, so students struggle to find nearby items that suit them.
 
-- **User Authentication:** Account registration and login.
-- **Browse Items:** View available products in the marketplace.
-- **Search and Filter:** Find items by name or category.
-- **Item Details:** View descriptions, prices, conditions, and seller information.
-- **Post Items:** Create listings with item details and images.
-- **Categories:** Browse items by category.
-- **Favorites:** Save items for future reference.
-- **Messaging:** Communicate with buyers and sellers.
-- **Orders:** View order information and status.
-- **User Profiles:** Manage personal account information.
+With CampusMart a student can:
 
-## 5. Technologies
+- Register and log in with a campus account
+- Post an item with a photo, price, condition and campus pickup point
+- Browse by category, search by keyword, filter by price, condition and campus, and sort
+- Save items to favourites
+- Message a seller about an item
+- Send a purchase request, which the seller accepts or rejects, then agree on a campus meeting point
+- Track orders from request to completion
 
-- **Mobile Application:** Flutter
-- **Programming Language:** Dart
-- **Backend:** To be implemented according to the agreed system design.
-- **Database:** To follow the approved Entity Relationship Diagram (ERD).
-- **Development Tools:** Visual Studio Code and Android Studio
-- **Version Control:** Git and GitHub
+Payment and delivery are out of scope: cash or mobile money is handed over at the meet-up.
 
-## 6. System Analysis and Design Document
+---
 
-The design document describes the proposed system, its requirements, database structure, and mobile application interfaces. It includes the problem statement, functional and non-functional requirements, user stories, Entity Relationship Diagram (ERD), data dictionary, API endpoint specifications, and screen sketches.
+## Features
 
-**[View the CampusMart Student Marketplace System Analysis & Design Document (PDF)](docs/Campusmart-Student%20Marketplace%20System%20Analysis%20%26%20Design%20Document.pdf)**
+| Area | What is implemented |
+| --- | --- |
+| Authentication | Register, login, JWT token, bcrypt password hashing, logout clears the token, 401 on protected endpoints |
+| Profile | View and edit own profile (name, phone, university), delete own account, light / dark mode |
+| Listings | Create, view, edit, delete, mark available / reserved / sold, My Listings, photo upload |
+| Discovery | Paged list (20 per page), keyword search, filters, sorting |
+| Favourites | Add, remove, view saved items |
+| Orders | Purchase request, accept / reject / complete (seller), cancel while pending (buyer) |
+| Messages | Inbox tab with unread badge, one entry per conversation, chat thread about an item |
+| Admin | Manage categories, remove inappropriate listings |
+| Error handling | Loading states, and a clear error with a Retry button when the server is off |
 
-## 7. Group Members
+---
 
-| Name | Registration Number | Course | Session |
-|---|---|---|---|
-| MUWONGE ABBASI | 241-21301-7261 | BCS | Weekend |
-| WAZIRI ASLAM | 241-22302-7521 | BIT | Weekend |
-| KAMARA YUSUF | 241-22302-7631 | BIT | Weekend |
+## Screenshots
 
-## 8. Project Status
+Screenshots are stored in `docs/screenshots/`.
 
-The project is currently in the system analysis and design stage. Application development, backend implementation, database integration, testing, and demonstration will follow.
+| Home | Sell an item | Orders |
+| --- | --- | --- |
+| ![Home](docs/screenshots/home.jpg) | ![Sell](docs/screenshots/sell.jpg) | ![Orders](docs/screenshots/orders.jpg) |
 
-## 9. Repository Structure
+| Inbox | Account |
+| --- | --- |
+| ![Inbox](docs/screenshots/inbox.jpg) | ![Account](docs/screenshots/account.jpg) |
 
-```text
-Student-Market-Place/
-├── README.md
-└── docs/
-    └── Campusmart-Student Marketplace System Analysis & Design Document.pdf
+<!-- TODO: add login.jpg, register.jpg, item-details.jpg and saved.jpg -->
+
+**Try the app:** download the Android APK
+[app-release.apk](https://drive.google.com/file/d/1UNqMibCedSQ_nBwl8uzeSffPv7b-AsNn/view?usp=sharing)
+(the backend must be running and reachable from the phone, see below).
+
+---
+
+## Changes from the design document
+
+The final app follows the design document with these changes:
+
+| Design document | Final app |
+| --- | --- |
+| Bottom navigation: Home, Favourites, Sell, Orders, Profile | Home, Saved, Sell, Orders, Inbox, Account (messages now have their own tab) |
+| Students identified by **campus** | Students identified by **university**, so the marketplace works across universities |
+| Orders screen with two tabs (My Orders, Requests Received) | One Orders screen listing buying and selling, with counts and a status label on each entry |
+| Teal colour scheme | Orange and white, with a light / dark mode switch in Account |
+
+---
+
+## Technology
+
+| Layer | Choice |
+| --- | --- |
+| Mobile app | Flutter (Dart), Provider, `http`, `flutter_secure_storage`, `image_picker` |
+| Backend | FastAPI (Python) with SQLAlchemy |
+| Database | SQLite (can move to PostgreSQL) |
+| Authentication | bcrypt (passlib) and JWT (python-jose) |
+| Tools | Swagger `/docs`, Postman, dbdiagram.io, Figma, GitHub |
+
+---
+
+## Repository structure
+
+```
+campusmart/
+├── backend/        FastAPI project and its own README with run steps
+├── app/            Flutter project
+│   └── lib/
+│       ├── models/
+│       ├── services/
+│       ├── screens/
+│       └── widgets/
+├── docs/           Design document (PDF), ERD image, API documentation, screenshots
+└── README.md       This file
 ```
 
-The `README.md` file provides an overview of the project, while the `docs/` folder contains the system analysis and design documentation. Application and backend folders can be added as development progresses.
+---
 
-## 10. Team Collaboration
+## Database
 
-The project is managed using GitHub for version control and collaborative development. Team members will contribute code, commit their changes, review updates, and integrate their work into the main branch.
+Six tables: `users`, `categories`, `items`, `orders`, `favorites`, `messages`.
 
-## 11. Project Purpose
+- One user posts many items, and one category contains many items (1:N)
+- One user places many orders, and one item can receive many orders (1:N)
+- `favorites` is the junction table that resolves the many-to-many relationship between users and items
+- `messages` links a sender, a receiver and, optionally, an item
 
-CampusMart is an academic project intended to apply skills in mobile application development, system analysis, database design, API development, testing, and teamwork to a practical student marketplace solution.
+The full ERD, data dictionary and endpoint table are in the design document in `docs/`.
+
+---
+
+## How to run
+
+### Requirements
+
+- Python 3.10 or newer
+- Flutter SDK (stable channel) and Android Studio or a phone with USB debugging
+- Git
+
+### 1. Get the code
+
+```bash
+git clone <REPOSITORY_URL>
+cd campusmart
+```
+
+### 2. Run the backend
+
+```bash
+cd backend
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+# macOS / Linux
+source venv/bin/activate
+
+pip install -r requirements.txt
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+- The API runs at `http://localhost:8000`
+- Swagger documentation: `http://localhost:8000/docs`
+- On first start the database file is created and the categories are seeded (Books, Electronics, Phones, Clothes and Shoes, Hostel and Furniture, Stationery, Food and Snacks, Services, Other)
+
+More detail is in `backend/README.md`.
+
+### 3. Run the Flutter app
+
+Set the API address in the app's configuration file (for example `app/lib/services/api_config.dart`):
+
+| Where the app runs | Base URL |
+| --- | --- |
+| Android emulator | `http://10.0.2.2:8000` |
+| Real phone on the same Wi-Fi | `http://<YOUR_LAPTOP_IP>:8000` |
+
+Then:
+
+```bash
+cd app
+flutter pub get
+flutter run
+```
+
+To build the APK:
+
+```bash
+flutter build apk --release
+```
+
+The file is created at `app/build/app/outputs/flutter-apk/app-release.apk`.
+
+### Test accounts
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Admin | `<ADMIN_EMAIL>` | `<ADMIN_PASSWORD>` |
+| Student | `<STUDENT_EMAIL>` | `<STUDENT_PASSWORD>` |
+
+---
+
+## API overview
+
+All protected endpoints need the header `Authorization: Bearer <token>`.
+
+| Group | Endpoints |
+| --- | --- |
+| Auth and profile | `POST /auth/register`, `POST /auth/login`, `GET /auth/me`, `PUT /users/me`, `DELETE /users/me` |
+| Categories | `GET /categories`, `POST /categories`, `PUT /categories/{id}`, `DELETE /categories/{id}` |
+| Items | `GET /items`, `GET /items/{id}`, `POST /items`, `PUT /items/{id}`, `PATCH /items/{id}/status`, `DELETE /items/{id}`, `POST /items/{id}/image`, `GET /users/me/items` |
+| Favourites | `GET /favorites`, `POST /favorites`, `DELETE /favorites/{item_id}` |
+| Orders | `POST /orders`, `GET /orders/mine`, `GET /orders/received`, `PATCH /orders/{id}/status` |
+| Messages | `POST /messages`, `GET /messages/conversations`, `GET /messages/thread` |
+
+Status codes: 200 OK, 201 Created, 400 validation error, 401 unauthorised, 403 not the owner, 404 not found.
+Full request and response details are in `docs/` and at `/docs` when the server is running.
+
+---
+
+## Business rules
+
+- A buyer cannot send a purchase request for their own item
+- Accepting a request sets the item to *reserved*; completing it sets the item to *sold*
+- Rejecting or cancelling a request sets the item back to *available*
+- A seller's phone number is visible only to logged-in users
+- Password hashes are never returned by the API
+
+---
+
+## Documentation
+
+| File | Content |
+| --- | --- |
+| `docs/CampusMart_System_Analysis_and_Design_Document.pdf` | Design document: problem statement, users, requirements, user stories, ERD, data dictionary, endpoint table, screens, plan, risks, and a checklist against the capstone guidelines |
+| `docs/` ERD image | CampusMart entity relationship diagram |
+| `docs/` Postman collection | Ready-made requests for every endpoint |
+| `docs/screenshots/` | Screenshots of the app |
+
+---
+
+## Teamwork
+
+Every member commits at least weekly. The Git history shows who contributed what.
+
+---
+
+## Acknowledgements
+
+Islamic Call University College, Mobile Application & Design course. Reference platforms for the idea: Jiji Uganda and ZiBuy Uganda.
