@@ -25,13 +25,18 @@ elif _raw_database_url.startswith("postgresql://"):
 else:
     DATABASE_URL = _raw_database_url
 
-# Render will provide a persistent directory for uploaded images.
+# Local fallback storage. Supabase will handle production image storage.
 UPLOAD_DIR = Path(os.getenv("UPLOAD_DIR", str(BASE_DIR / "uploads")))
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 MAX_UPLOAD_BYTES = 5 * 1024 * 1024
-
 PAGE_SIZE = 20
 
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@campusmart.ug")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "Admin12345")
+
+# Supabase Storage configuration
+SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
+SUPABASE_SECRET_KEY = os.getenv("SUPABASE_SECRET_KEY", "")
+SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET", "product-images")
+SUPABASE_SERVICE_ROLE_JWT = os.getenv("SUPABASE_SERVICE_ROLE_JWT", "")
