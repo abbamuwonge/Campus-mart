@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/catalog_provider.dart';
+import '../providers/auth_provider.dart';
+import '../providers/message_notification_provider.dart';
 import '../providers/nav_provider.dart';
 import '../services/category_service.dart';
 import '../services/favorite_service.dart';
 import '../services/item_service.dart';
+import '../services/message_service.dart';
 import '../theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/bottom_nav.dart';
@@ -25,6 +28,12 @@ class MainShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<MessageNotificationProvider>(
+          create: (ctx) => MessageNotificationProvider(
+            ctx.read<MessageService>(),
+            ctx.read<AuthProvider>(),
+          )..start(),
+        ),
         ChangeNotifierProvider<NavProvider>(create: (_) => NavProvider()),
         ChangeNotifierProvider<CatalogProvider>(
           create: (ctx) {
@@ -61,11 +70,15 @@ class _ShellView extends StatelessWidget {
               children: [
                 const HomeScreen(),
                 FavouritesScreen(active: nav.page == AppPage.saved),
-                PostItemScreen(key: ValueKey(nav.editingItem?.id ?? 0), editing: nav.editingItem),
+                PostItemScreen(
+                    key: ValueKey(nav.editingItem?.id ?? 0),
+                    editing: nav.editingItem),
                 OrdersScreen(active: nav.page == AppPage.orders),
                 MessagesScreen(active: nav.page == AppPage.inbox),
                 const ProfileScreen(),
-                ItemDetailsScreen(key: ValueKey(nav.selectedItem?.id ?? 0), item: nav.selectedItem),
+                ItemDetailsScreen(
+                    key: ValueKey(nav.selectedItem?.id ?? 0),
+                    item: nav.selectedItem),
               ],
             ),
           ),

@@ -69,22 +69,26 @@ class ProductCard extends StatelessWidget {
                     item.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 5),
                   Text(
                     cash(item.price),
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.price),
+                    style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.price),
                   ),
                   const SizedBox(height: 5),
                   Text(
                     '${item.category.name} · ${item.conditionLabel}',
-                    style: const TextStyle(fontSize: 10, color: AppColors.muted),
+                    style: TextStyle(fontSize: 10, color: AppColors.muted),
                   ),
                   const SizedBox(height: 5),
                   Text(
                     '📍 ${item.sellerCampus}',
-                    style: const TextStyle(fontSize: 10, color: AppColors.muted),
+                    style: TextStyle(fontSize: 10, color: AppColors.muted),
                   ),
                 ],
               ),

@@ -16,7 +16,8 @@ class StatusBadge extends StatelessWidget {
         color: AppColors.badgeBg,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Text(text, style: const TextStyle(fontSize: 10, color: AppColors.badgeText)),
+      child: Text(text,
+          style: TextStyle(fontSize: 10, color: AppColors.badgeText)),
     );
   }
 }

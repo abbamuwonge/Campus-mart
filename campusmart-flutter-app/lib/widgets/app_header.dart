@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
+import '../providers/message_notification_provider.dart';
 import '../providers/nav_provider.dart';
 import '../theme.dart';
 import '../utils/format.dart';
+import '../utils/auth_guard.dart';
 import 'brand.dart';
 
 /// The prototype's sticky header: logo, message and profile buttons, greeting.
@@ -15,11 +17,12 @@ class AppHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = context.watch<AuthProvider>().user;
     final nav = context.read<NavProvider>();
+    final unread = context.watch<MessageNotificationProvider>().unreadCount;
     final top = MediaQuery.of(context).padding.top;
 
     return Container(
       padding: EdgeInsets.fromLTRB(16, 16 + top, 16, 12),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.headerBg,
         border: Border(bottom: BorderSide(color: AppColors.headerLine)),
       ),
@@ -32,20 +35,43 @@ class AppHeader extends StatelessWidget {
               const Brand(),
               Row(
                 children: [
-                  _IconButton(icon: Icons.mail_outline, size: 18, tooltip: 'Messages', onTap: () => nav.go(AppPage.inbox)),
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      _IconButton(
+                          icon: Icons.mail_outline,
+                          size: 18,
+                          tooltip: 'Messages',
+                          onTap: () => requireAuth(
+                              context, () => nav.go(AppPage.inbox))),
+                      if (unread > 0)
+                        Positioned(
+                          right: -5,
+                          top: -6,
+                          child: _UnreadBadge(unread),
+                        ),
+                    ],
+                  ),
                   const SizedBox(width: 9),
-                  _IconButton(icon: Icons.circle, size: 12, tooltip: 'Profile', onTap: () => nav.go(AppPage.profile)),
+                  _IconButton(
+                      icon: Icons.circle,
+                      size: 12,
+                      tooltip: 'Profile',
+                      onTap: () =>
+                          requireAuth(context, () => nav.go(AppPage.profile))),
                 ],
               ),
             ],
           ),
           const SizedBox(height: 13),
           Text(
-            user == null ? 'Find what you need on campus 👋' : 'Welcome, ${firstName(user.fullName)} 👋',
+            user == null
+                ? 'Find what you need on campus 👋'
+                : 'Welcome, ${firstName(user.fullName)} 👋',
             style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 2),
-          const Text(
+          Text(
             'Buy · Sell · Connect — Across Universities',
             style: TextStyle(fontSize: 12, color: AppColors.muted),
           ),
@@ -55,8 +81,35 @@ class AppHeader extends StatelessWidget {
   }
 }
 
+class _UnreadBadge extends StatelessWidget {
+  const _UnreadBadge(this.count);
+
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(minWidth: 17, minHeight: 17),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: AppColors.orange,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppColors.headerBg, width: 2),
+      ),
+      child: Text(count > 99 ? '99+' : '$count',
+          style: const TextStyle(
+              color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
+    );
+  }
+}
+
 class _IconButton extends StatelessWidget {
-  const _IconButton({required this.icon, required this.size, required this.tooltip, required this.onTap});
+  const _IconButton(
+      {required this.icon,
+      required this.size,
+      required this.tooltip,
+      required this.onTap});
 
   final IconData icon;
   final double size;

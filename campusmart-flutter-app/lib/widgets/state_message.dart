@@ -29,7 +29,9 @@ class ErrorRetry extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 24),
       child: Column(
         children: [
-          Text(message, textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted)),
+          Text(message,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: AppColors.muted)),
           const SizedBox(height: 12),
           AppButton(label: 'Retry', secondary: true, onPressed: onRetry),
         ],
@@ -48,7 +50,7 @@ class EmptyMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 14),
-      child: Text(text, style: const TextStyle(color: AppColors.muted)),
+      child: Text(text, style: TextStyle(color: AppColors.muted)),
     );
   }
 }

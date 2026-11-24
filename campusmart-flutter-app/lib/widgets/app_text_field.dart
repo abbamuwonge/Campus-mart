@@ -37,7 +37,8 @@ class AppTextField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (label != null) ...[
-            Text(label!, style: const TextStyle(color: AppColors.label, fontSize: 12)),
+            Text(label!,
+                style: TextStyle(color: AppColors.label, fontSize: 12)),
             const SizedBox(height: 6),
           ],
           TextField(

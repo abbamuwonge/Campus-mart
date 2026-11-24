@@ -7,7 +7,11 @@ import '../theme.dart';
 /// The grey photo box of the prototype. Shows the uploaded photo when there is one,
 /// otherwise the category emoji, like the prototype does.
 class ItemPhoto extends StatelessWidget {
-  const ItemPhoto({super.key, required this.item, required this.height, required this.emojiSize});
+  const ItemPhoto(
+      {super.key,
+      required this.item,
+      required this.height,
+      required this.emojiSize});
 
   final Item item;
   final double height;
@@ -15,12 +19,13 @@ class ItemPhoto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final emoji = Center(child: Text(item.category.icon, style: TextStyle(fontSize: emojiSize)));
+    final emoji = Center(
+        child: Text(item.category.icon, style: TextStyle(fontSize: emojiSize)));
     final url = ApiClient.imageUrl(item.imageUrl);
     return Container(
       height: height,
       width: double.infinity,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,

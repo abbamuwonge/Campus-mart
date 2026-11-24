@@ -100,7 +100,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
     await _loadThread();
     _poll?.cancel();
     // No push messages in this backend, so the open chat checks for new messages every few seconds.
-    _poll = Timer.periodic(const Duration(seconds: 5), (_) => _loadThread(quiet: true));
+    _poll = Timer.periodic(
+        const Duration(seconds: 5), (_) => _loadThread(quiet: true));
   }
 
   Future<void> _loadThread({bool quiet = false}) async {
@@ -108,7 +109,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
     if (target == null) return;
     final service = context.read<MessageService>();
     try {
-      final list = await service.thread(withUser: target.otherUserId, itemId: target.itemId);
+      final list = await service.thread(
+          withUser: target.otherUserId, itemId: target.itemId);
       if (!mounted || _chat != target) return;
       final changed = list.length != _messages.length;
       setState(() => _messages = list);
@@ -138,7 +140,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
     if (target == null || text.isEmpty) return;
     final service = context.read<MessageService>();
     try {
-      await service.send(receiverId: target.otherUserId, itemId: target.itemId, body: text);
+      await service.send(
+          receiverId: target.otherUserId, itemId: target.itemId, body: text);
       _input.clear();
       await _loadThread();
       _loadConversations();
@@ -157,7 +160,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
     } else if (_error != null && _conversations.isEmpty) {
       list = ErrorRetry(message: _error!, onRetry: _loadConversations);
     } else if (_conversations.isEmpty) {
-      list = const Text('No conversations yet.', style: TextStyle(color: AppColors.muted));
+      list = Text('No conversations yet.',
+          style: TextStyle(color: AppColors.muted));
     } else {
       list = Column(
         children: [
@@ -168,13 +172,16 @@ class _MessagesScreenState extends State<MessagesScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(c.target.otherUserName, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text(c.target.otherUserName,
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 5),
                   Text(
-                    c.target.itemTitle == null ? c.lastMessage : '${c.target.itemTitle} · ${c.lastMessage}',
+                    c.target.itemTitle == null
+                        ? c.lastMessage
+                        : '${c.target.itemTitle} · ${c.lastMessage}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 10, color: AppColors.muted),
+                    style: TextStyle(fontSize: 10, color: AppColors.muted),
                   ),
                 ],
               ),
@@ -195,17 +202,21 @@ class _MessagesScreenState extends State<MessagesScreen> {
               children: [
                 AppRow(
                   last: true,
-                  trailing: AppButton(label: 'Back', secondary: true, onPressed: _closeChat),
-                  child: Text(_chat!.otherUserName, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  trailing: AppButton(
+                      label: 'Back', secondary: true, onPressed: _closeChat),
+                  child: Text(_chat!.otherUserName,
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                 ),
                 ConstrainedBox(
-                  constraints: const BoxConstraints(minHeight: 180, maxHeight: 310),
+                  constraints:
+                      const BoxConstraints(minHeight: 180, maxHeight: 310),
                   child: ListView(
                     controller: _chatScroll,
                     shrinkWrap: true,
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     children: [
-                      for (final m in _messages) _Bubble(text: m.body, mine: m.senderId == myId),
+                      for (final m in _messages)
+                        _Bubble(text: m.body, mine: m.senderId == myId),
                     ],
                   ),
                 ),
@@ -245,7 +256,8 @@ class _Bubble extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 9),
         padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 10),
-        constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.82 - 40),
+        constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.82 - 40),
         decoration: BoxDecoration(
           color: mine ? AppColors.bubbleMine : AppColors.bubble,
           borderRadius: BorderRadius.circular(13),

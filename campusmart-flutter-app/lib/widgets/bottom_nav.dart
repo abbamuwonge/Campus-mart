@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/nav_provider.dart';
+import '../providers/message_notification_provider.dart';
 import '../theme.dart';
+import '../utils/auth_guard.dart';
 
 class _NavItem {
   const _NavItem(this.page, this.icon, this.label, this.iconSize);
@@ -29,12 +31,13 @@ class BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final nav = context.watch<NavProvider>();
+    final unread = context.watch<MessageNotificationProvider>().unreadCount;
     final bottom = MediaQuery.of(context).viewPadding.bottom;
 
     return Container(
       height: 69 + bottom,
       padding: EdgeInsets.fromLTRB(3, 7, 3, 7 + bottom),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.navBg,
         border: Border(top: BorderSide(color: AppColors.line)),
       ),
@@ -44,7 +47,13 @@ class BottomNav extends StatelessWidget {
           for (final item in _items)
             GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onTap: () => nav.go(item.page),
+              onTap: () {
+                if (item.page == AppPage.home) {
+                  nav.go(AppPage.home);
+                } else {
+                  requireAuth(context, () => nav.go(item.page));
+                }
+              },
               child: SizedBox(
                 width: 52,
                 child: Column(
@@ -52,10 +61,39 @@ class BottomNav extends StatelessWidget {
                   children: [
                     SizedBox(
                       height: 24,
-                      child: Icon(
-                        item.icon,
-                        size: item.iconSize,
-                        color: nav.page == item.page ? AppColors.orange : AppColors.navInactive,
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.center,
+                        children: [
+                          Icon(
+                            item.icon,
+                            size: item.iconSize,
+                            color: nav.page == item.page
+                                ? AppColors.orange
+                                : AppColors.navInactive,
+                          ),
+                          if (item.page == AppPage.inbox && unread > 0)
+                            Positioned(
+                              right: -13,
+                              top: -7,
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                constraints: const BoxConstraints(
+                                    minWidth: 16, minHeight: 16),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: AppColors.orange,
+                                  borderRadius: BorderRadius.circular(9),
+                                ),
+                                child: Text(unread > 99 ? '99+' : '$unread',
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 8,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 3),
@@ -63,7 +101,9 @@ class BottomNav extends StatelessWidget {
                       item.label,
                       style: TextStyle(
                         fontSize: 10,
-                        color: nav.page == item.page ? AppColors.orange : AppColors.navInactive,
+                        color: nav.page == item.page
+                            ? AppColors.orange
+                            : AppColors.navInactive,
                       ),
                     ),
                   ],

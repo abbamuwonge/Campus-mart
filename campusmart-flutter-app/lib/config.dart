@@ -1,14 +1,15 @@
 /// App-wide settings.
 ///
-/// The API address is set when you run the app, so nobody edits code to switch between
-/// the emulator, Chrome and a real phone:
+/// The API address can be changed when building or running the app.
 ///
-///   flutter run --dart-define=API_BASE_URL=http://192.168.1.23:8000
+/// For local development:
+///   flutter run --dart-define=API_BASE_URL=http://127.0.0.1:8000
 ///
-/// Default (no flag): the Android emulator's address for the laptop.
+/// For production:
+///   https://campus-mart-uqh5.onrender.com
 class AppConfig {
   static const String apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://10.0.2.2:8000',
+    defaultValue: 'https://campus-mart-uqh5.onrender.com',
   );
 }

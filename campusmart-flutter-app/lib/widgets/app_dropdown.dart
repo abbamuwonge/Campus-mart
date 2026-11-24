@@ -26,7 +26,7 @@ class AppDropdown<T> extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(color: AppColors.label, fontSize: 12)),
+          Text(label, style: TextStyle(color: AppColors.label, fontSize: 12)),
           const SizedBox(height: 6),
           InputDecorator(
             decoration: appInputDecoration(),
@@ -40,7 +40,8 @@ class AppDropdown<T> extends StatelessWidget {
                 style: const TextStyle(color: Colors.white, fontSize: 14),
                 items: [
                   for (final option in options)
-                    DropdownMenuItem<T>(value: option, child: Text(optionLabel(option))),
+                    DropdownMenuItem<T>(
+                        value: option, child: Text(optionLabel(option))),
                 ],
                 onChanged: onChanged,
               ),

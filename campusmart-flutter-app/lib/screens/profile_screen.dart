@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
+import '../providers/theme_provider.dart';
 import '../services/api_client.dart';
 import '../services/user_service.dart';
 import '../theme.dart';
@@ -91,10 +92,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     width: 53,
                     height: 53,
                     alignment: Alignment.center,
-                    decoration: const BoxDecoration(color: AppColors.avatarBg, shape: BoxShape.circle),
+                    decoration: BoxDecoration(
+                        color: AppColors.avatarBg, shape: BoxShape.circle),
                     child: Text(
                       initials(name),
-                      style: const TextStyle(color: AppColors.avatarText, fontSize: 20, fontWeight: FontWeight.w800),
+                      style: TextStyle(
+                          color: AppColors.avatarText,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -102,8 +107,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                        Text(user?.email ?? '', style: const TextStyle(color: AppColors.muted)),
+                        Text(name,
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
+                        Text(user?.email ?? '',
+                            style: TextStyle(color: AppColors.muted)),
                       ],
                     ),
                   ),
@@ -111,10 +119,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 4),
               AppTextField(controller: _name, label: 'Full name'),
-              AppTextField(controller: _phone, label: 'Phone number', hint: '+256...', keyboardType: TextInputType.phone),
+              AppTextField(
+                  controller: _phone,
+                  label: 'Phone number',
+                  hint: '+256...',
+                  keyboardType: TextInputType.phone),
               AppTextField(controller: _university, label: 'University'),
               const SizedBox(height: 4),
-              AppButton(label: 'Save changes', full: true, loading: _saving, onPressed: _save),
+              AppButton(
+                  label: 'Save changes',
+                  full: true,
+                  loading: _saving,
+                  onPressed: _save),
             ],
           ),
         ),
@@ -122,9 +138,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('About CampusMart', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Appearance',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              const SizedBox(height: 6),
+              Consumer<ThemeProvider>(
+                builder: (context, theme, _) => SwitchListTile.adaptive(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(theme.isDark ? 'Dark mode' : 'Light mode'),
+                  subtitle: Text(
+                    theme.isDark
+                        ? 'Easier on the eyes at night'
+                        : 'Bright and clear during the day',
+                    style: TextStyle(color: AppColors.muted),
+                  ),
+                  value: theme.isDark,
+                  activeColor: AppColors.orange,
+                  onChanged: theme.setDark,
+                ),
+              ),
+              const SizedBox(height: 12),
+              const Text('About CampusMart',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 14),
-              const Text(
+              Text(
                 'A marketplace for students to buy, sell and connect across universities.',
                 style: TextStyle(color: AppColors.muted),
               ),
@@ -133,7 +169,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 label: 'Help & assistance',
                 full: true,
                 secondary: true,
-                onPressed: () => showToast('Help centre will be available in the full app.'),
+                onPressed: () =>
+                    showToast('Help centre will be available in the full app.'),
               ),
               const SizedBox(height: 9),
               AppButton(

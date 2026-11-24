@@ -18,10 +18,12 @@ class SectionTitle extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Flexible(
-            child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            child: Text(title,
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           ),
           const SizedBox(width: 8),
-          Text(note, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+          Text(note, style: TextStyle(fontSize: 12, color: AppColors.muted)),
         ],
       ),
     );

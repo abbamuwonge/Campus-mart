@@ -10,9 +10,11 @@ import '../widgets/app_toast.dart';
 
 /// The "Welcome back" form (shown inside AuthScreen).
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key, required this.onShowRegister});
+  const LoginScreen(
+      {super.key, required this.onShowRegister, this.onAuthenticated});
 
   final VoidCallback onShowRegister;
+  final VoidCallback? onAuthenticated;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -42,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await auth.login(email, _password.text);
       showToast('Signed in successfully');
-      // The AuthGate in main.dart now replaces this screen with the marketplace.
+      widget.onAuthenticated?.call();
     } on ApiException catch (e) {
       showToast(e.message);
     } finally {
@@ -56,9 +58,11 @@ class _LoginScreenState extends State<LoginScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 36),
-        const Text('Welcome back', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+        const Text('Welcome back',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
         const SizedBox(height: 14),
-        const Text('Sign in to your student marketplace.', style: TextStyle(color: AppColors.muted)),
+        Text('Sign in to your student marketplace.',
+            style: TextStyle(color: AppColors.muted)),
         AppTextField(
           controller: _email,
           label: 'Email address',
@@ -76,7 +80,11 @@ class _LoginScreenState extends State<LoginScreen> {
           onSubmitted: (_) => _submit(),
           margin: const EdgeInsets.symmetric(vertical: 15),
         ),
-        AppButton(label: 'Sign in', full: true, loading: _loading, onPressed: _submit),
+        AppButton(
+            label: 'Sign in',
+            full: true,
+            loading: _loading,
+            onPressed: _submit),
         const SizedBox(height: 20),
         Center(
           child: Wrap(
@@ -85,7 +93,8 @@ class _LoginScreenState extends State<LoginScreen> {
               const Text('New to CampusMart? '),
               GestureDetector(
                 onTap: _loading ? null : widget.onShowRegister,
-                child: const Text('Create account', style: TextStyle(color: AppColors.orange2)),
+                child: const Text('Create account',
+                    style: TextStyle(color: AppColors.orange2)),
               ),
             ],
           ),

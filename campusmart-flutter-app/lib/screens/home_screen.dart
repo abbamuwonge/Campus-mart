@@ -12,6 +12,7 @@ import '../widgets/product_card.dart';
 import '../widgets/product_grid.dart';
 import '../widgets/section_title.dart';
 import '../widgets/state_message.dart';
+import '../utils/auth_guard.dart';
 
 /// Marketplace home: search, banner, category chips and the product grid.
 class HomeScreen extends StatefulWidget {
@@ -32,7 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onScroll() {
-    if (_scroll.hasClients && _scroll.position.pixels >= _scroll.position.maxScrollExtent - 300) {
+    if (_scroll.hasClients &&
+        _scroll.position.pixels >= _scroll.position.maxScrollExtent - 300) {
       context.read<CatalogProvider>().loadMore(); // next page of 20
     }
   }
@@ -71,7 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   item: item,
                   isSaved: catalog.isFavorite(item.id),
                   onOpen: () => nav.openDetail(item),
-                  onToggleSaved: () => _toggleSaved(catalog, item.id),
+                  onToggleSaved: () => requireAuth(
+                      context, () => _toggleSaved(catalog, item.id)),
                 ),
             ],
           ),
@@ -116,7 +119,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: AppColors.orange,
                       borderRadius: BorderRadius.circular(11),
                     ),
-                    child: const Icon(Icons.search, size: 22, color: Colors.black),
+                    child:
+                        const Icon(Icons.search, size: 22, color: Colors.black),
                   ),
                 ),
               ],
@@ -128,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(17),
               border: Border.all(color: AppColors.bannerLine),
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 begin: Alignment(-1, -0.6),
                 end: Alignment(1, 0.6),
                 colors: [AppColors.bannerA, AppColors.bannerB],
@@ -142,17 +146,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Your campus marketplace',
-                        style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, height: 1.2),
+                        style: TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.bold,
+                            height: 1.2),
                       ),
                       const SizedBox(height: 7),
-                      const Text(
+                      Text(
                         'Great student deals, all in one place.',
-                        style: TextStyle(fontSize: 12, color: AppColors.bannerText),
+                        style: TextStyle(
+                            fontSize: 12, color: AppColors.bannerText),
                       ),
                       const SizedBox(height: 13),
-                      AppButton(label: 'Start selling', onPressed: () => nav.go(AppPage.sell)),
+                      AppButton(
+                          label: 'Start selling',
+                          onPressed: () =>
+                              requireAuth(context, () => nav.go(AppPage.sell))),
                     ],
                   ),
                 ),

@@ -11,9 +11,11 @@ import '../widgets/app_toast.dart';
 
 /// The "Create account" form (shown inside AuthScreen).
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key, required this.onShowLogin});
+  const RegisterScreen(
+      {super.key, required this.onShowLogin, this.onAuthenticated});
 
   final VoidCallback onShowLogin;
+  final VoidCallback? onAuthenticated;
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -38,7 +40,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _submit() async {
-    if (_name.text.trim().isEmpty || _email.text.trim().isEmpty || _password.text.isEmpty) {
+    if (_name.text.trim().isEmpty ||
+        _email.text.trim().isEmpty ||
+        _password.text.isEmpty) {
       showToast('Complete name, email and password');
       return;
     }
@@ -63,6 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         password: _password.text,
       );
       showToast('Account created');
+      widget.onAuthenticated?.call();
     } on ApiException catch (e) {
       showToast(e.message);
     } finally {
@@ -77,10 +82,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 36),
-        const Text('Create account', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+        const Text('Create account',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
         const SizedBox(height: 14),
-        const Text('Join your campus marketplace.', style: TextStyle(color: AppColors.muted)),
-        AppTextField(controller: _name, label: 'Full name', hint: 'Full name', textInputAction: TextInputAction.next, margin: margin),
+        Text('Join your campus marketplace.',
+            style: TextStyle(color: AppColors.muted)),
+        AppTextField(
+            controller: _name,
+            label: 'Full name',
+            hint: 'Full name',
+            textInputAction: TextInputAction.next,
+            margin: margin),
         AppTextField(
           controller: _email,
           label: 'University email',
@@ -89,7 +101,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           textInputAction: TextInputAction.next,
           margin: margin,
         ),
-        AppTextField(controller: _university, label: 'University', hint: 'University name', textInputAction: TextInputAction.next, margin: margin),
+        AppTextField(
+            controller: _university,
+            label: 'University',
+            hint: 'University name',
+            textInputAction: TextInputAction.next,
+            margin: margin),
         AppTextField(
           controller: _phone,
           label: 'Phone number',
@@ -107,7 +124,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
           onSubmitted: (_) => _submit(),
           margin: margin,
         ),
-        AppButton(label: 'Create account', full: true, loading: _loading, onPressed: _submit),
+        AppButton(
+            label: 'Create account',
+            full: true,
+            loading: _loading,
+            onPressed: _submit),
         const SizedBox(height: 14),
         Center(
           child: Wrap(
@@ -116,7 +137,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const Text('Already have an account? '),
               GestureDetector(
                 onTap: _loading ? null : widget.onShowLogin,
-                child: const Text('Sign in', style: TextStyle(color: AppColors.orange2)),
+                child: const Text('Sign in',
+                    style: TextStyle(color: AppColors.orange2)),
               ),
             ],
           ),

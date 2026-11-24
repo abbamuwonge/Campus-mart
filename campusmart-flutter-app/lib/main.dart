@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/auth_provider.dart';
-import 'screens/auth_screen.dart';
+import 'providers/theme_provider.dart';
 import 'screens/main_shell.dart';
 import 'screens/splash_screen.dart';
 import 'services/api_client.dart';
@@ -22,7 +22,7 @@ import 'widgets/app_toast.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
+    SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
       systemNavigationBarColor: AppColors.surface,
@@ -32,7 +32,10 @@ void main() {
 
   final api = ApiClient();
   final auth = AuthProvider(AuthService(api), api);
-  unawaited(auth.restore()); // the splash screen shows while the saved login is checked
+  final theme = ThemeProvider();
+  unawaited(auth
+      .restore()); // the splash screen shows while the saved login is checked
+  unawaited(theme.restore());
 
   runApp(
     MultiProvider(
@@ -45,6 +48,7 @@ void main() {
         Provider<MessageService>.value(value: MessageService(api)),
         Provider<UserService>.value(value: UserService(api)),
         ChangeNotifierProvider<AuthProvider>.value(value: auth),
+        ChangeNotifierProvider<ThemeProvider>.value(value: theme),
       ],
       child: const CampusMartApp(),
     ),
@@ -56,18 +60,20 @@ class CampusMartApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.watch<ThemeProvider>();
     return MaterialApp(
       title: 'CampusMart',
       debugShowCheckedModeBanner: false,
-      theme: buildTheme(),
+      theme: buildTheme(dark: theme.isDark),
+      themeMode: theme.isDark ? ThemeMode.dark : ThemeMode.light,
       scaffoldMessengerKey: messengerKey,
       home: const AuthGate(),
     );
   }
 }
 
-/// Chooses the first screen from the login state, and switches automatically when it changes
-/// (login, logout, or the server rejecting an expired token).
+/// Shows the marketplace after startup. Guests can browse; protected actions
+/// open the sign-in and registration flow from inside the marketplace.
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
 
@@ -77,7 +83,7 @@ class AuthGate extends StatelessWidget {
     return switch (status) {
       AuthStatus.unknown => const SplashScreen(),
       AuthStatus.authenticated => const MainShell(),
-      AuthStatus.unauthenticated => const AuthScreen(),
+      AuthStatus.unauthenticated => const MainShell(),
     };
   }
 }

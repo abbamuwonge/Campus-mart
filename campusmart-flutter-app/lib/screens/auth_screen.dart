@@ -7,7 +7,9 @@ import 'register_screen.dart';
 
 /// The prototype's sign-in page. "Create account" and "Sign in" swap the two forms in place.
 class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key});
+  const AuthScreen({super.key, this.onAuthenticated});
+
+  final VoidCallback? onAuthenticated;
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -31,14 +33,21 @@ class _AuthScreenState extends State<AuthScreen> {
                   const SizedBox(height: 25),
                   const Brand(),
                   const SizedBox(height: 14),
-                  const Text(
+                  Text(
                     'Buy · Sell · Connect — Across Universities',
                     style: TextStyle(color: AppColors.muted),
                   ),
                   if (_showRegister)
-                    RegisterScreen(onShowLogin: () => setState(() => _showRegister = false))
+                    RegisterScreen(
+                      onShowLogin: () => setState(() => _showRegister = false),
+                      onAuthenticated: widget.onAuthenticated,
+                    )
                   else
-                    LoginScreen(onShowRegister: () => setState(() => _showRegister = true)),
+                    LoginScreen(
+                      onShowRegister: () =>
+                          setState(() => _showRegister = true),
+                      onAuthenticated: widget.onAuthenticated,
+                    ),
                 ],
               ),
             ),

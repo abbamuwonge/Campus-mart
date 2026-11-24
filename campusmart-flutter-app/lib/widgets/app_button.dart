@@ -40,7 +40,10 @@ class AppButton extends StatelessWidget {
                   child: Text(
                     label,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: foreground, fontWeight: FontWeight.w800, fontSize: 14),
+                    style: TextStyle(
+                        color: foreground,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 14),
                   ),
                 ),
             ],
@@ -50,7 +53,7 @@ class AppButton extends StatelessWidget {
       color: secondary ? AppColors.surface2 : AppColors.orange,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
-        side: secondary ? const BorderSide(color: AppColors.line) : BorderSide.none,
+        side: secondary ? BorderSide(color: AppColors.line) : BorderSide.none,
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(10),

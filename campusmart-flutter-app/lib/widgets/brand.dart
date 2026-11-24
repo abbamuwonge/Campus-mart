@@ -8,9 +8,13 @@ class Brand extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text.rich(
+    return Text.rich(
       TextSpan(
-        style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, letterSpacing: -1, color: AppColors.text),
+        style: TextStyle(
+            fontSize: 23,
+            fontWeight: FontWeight.w900,
+            letterSpacing: -1,
+            color: AppColors.text),
         children: [
           TextSpan(text: 'Campus'),
           TextSpan(text: 'Mart', style: TextStyle(color: AppColors.orange)),

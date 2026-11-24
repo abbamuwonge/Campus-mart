@@ -10,6 +10,7 @@ import '../services/message_service.dart';
 import '../services/order_service.dart';
 import '../theme.dart';
 import '../utils/format.dart';
+import '../utils/auth_guard.dart';
 import '../widgets/app_button.dart';
 import '../widgets/app_row.dart';
 import '../widgets/app_toast.dart';
@@ -50,7 +51,8 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
     setState(() => _busy = true);
     try {
       // Like the prototype: a new chat starts with a first message.
-      final thread = await messages.thread(withUser: item.sellerId, itemId: item.id);
+      final thread =
+          await messages.thread(withUser: item.sellerId, itemId: item.id);
       if (thread.isEmpty) {
         await messages.send(
           receiverId: item.sellerId,
@@ -88,7 +90,10 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
       children: [
         Align(
           alignment: Alignment.centerLeft,
-          child: AppButton(label: '← Back', secondary: true, onPressed: () => nav.go(AppPage.home)),
+          child: AppButton(
+              label: '← Back',
+              secondary: true,
+              onPressed: () => nav.go(AppPage.home)),
         ),
         const SizedBox(height: 12),
         Panel(
@@ -100,45 +105,64 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                 child: ItemPhoto(item: item, height: 245, emojiSize: 90),
               ),
               const SizedBox(height: 15),
-              Text('${item.category.name} · ${item.conditionLabel}', style: const TextStyle(color: AppColors.muted)),
+              Text('${item.category.name} · ${item.conditionLabel}',
+                  style: TextStyle(color: AppColors.muted)),
               const SizedBox(height: 14),
-              Text(item.title, style: const TextStyle(fontSize: 21, fontWeight: FontWeight.bold)),
+              Text(item.title,
+                  style: const TextStyle(
+                      fontSize: 21, fontWeight: FontWeight.bold)),
               const SizedBox(height: 14),
               Text(
                 cash(item.price),
-                style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w800, color: AppColors.price),
+                style: const TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.price),
               ),
               const SizedBox(height: 14),
-              Text(item.description, style: const TextStyle(color: AppColors.muted)),
+              Text(item.description, style: TextStyle(color: AppColors.muted)),
               const SizedBox(height: 14),
               Panel(
                 margin: const EdgeInsets.only(bottom: 14),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Seller', style: TextStyle(fontWeight: FontWeight.bold)),
+                    const Text('Seller',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                     AppRow(
                       last: true,
-                      trailing: Text(item.sellerCampus, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                      trailing: Text(item.sellerCampus,
+                          style:
+                              TextStyle(fontSize: 12, color: AppColors.muted)),
                       child: Text(item.sellerName),
                     ),
-                    const Text(
+                    Text(
                       'Arrange a safe meeting point on campus when completing a purchase.',
                       style: TextStyle(fontSize: 12, color: AppColors.muted),
                     ),
                   ],
                 ),
               ),
-              AppButton(label: 'Request to buy', full: true, loading: _busy, onPressed: () => _buy(item)),
+              AppButton(
+                  label: 'Request to buy',
+                  full: true,
+                  loading: _busy,
+                  onPressed: () => requireAuth(context, () => _buy(item))),
               const SizedBox(height: 8),
-              AppButton(label: 'Message seller', full: true, secondary: true, onPressed: _busy ? null : () => _messageSeller(item)),
+              AppButton(
+                  label: 'Message seller',
+                  full: true,
+                  secondary: true,
+                  onPressed: _busy
+                      ? null
+                      : () => requireAuth(context, () => _messageSeller(item))),
               const SizedBox(height: 8),
               AppButton(
                 label: saved ? 'Remove from saved' : 'Save item',
                 icon: saved ? Icons.favorite : Icons.favorite_border,
                 full: true,
                 secondary: true,
-                onPressed: () => _toggleSaved(item),
+                onPressed: () => requireAuth(context, () => _toggleSaved(item)),
               ),
             ],
           ),

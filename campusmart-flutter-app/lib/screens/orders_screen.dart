@@ -69,7 +69,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
       _error = null;
     });
     try {
-      final results = await Future.wait([orders.mine(), orders.received(), items.mine()]);
+      final results =
+          await Future.wait([orders.mine(), orders.received(), items.mine()]);
       if (!mounted) return;
       setState(() {
         _buying = results[0] as List<Order>;
@@ -94,7 +95,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
     if (!mounted) return;
     await _load();
     if (!mounted) return;
-    context.read<CatalogProvider>().refresh(); // statuses changed, so the feed may have too
+    context
+        .read<CatalogProvider>()
+        .refresh(); // statuses changed, so the feed may have too
   }
 
   Future<void> _showActions(String title, List<_Action> actions) async {
@@ -102,7 +105,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
     await showModalBottomSheet<void>(
       context: context,
       backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(14))),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(14))),
       builder: (sheetContext) => SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(15),
@@ -135,7 +139,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
     final orders = context.read<OrderService>();
     _showActions(order.itemTitle, [
       if (order.status == 'pending')
-        _Action('Cancel request', () => _run(() => orders.setStatus(order.id, 'cancelled'), 'Request cancelled')),
+        _Action(
+            'Cancel request',
+            () => _run(() => orders.setStatus(order.id, 'cancelled'),
+                'Request cancelled')),
     ]);
   }
 
@@ -143,11 +150,20 @@ class _OrdersScreenState extends State<OrdersScreen> {
     final orders = context.read<OrderService>();
     _showActions('Request from ${order.buyerName}', [
       if (order.status == 'pending')
-        _Action('Accept request', () => _run(() => orders.setStatus(order.id, 'accepted'), 'Request accepted')),
+        _Action(
+            'Accept request',
+            () => _run(() => orders.setStatus(order.id, 'accepted'),
+                'Request accepted')),
       if (order.status == 'accepted')
-        _Action('Mark as completed', () => _run(() => orders.setStatus(order.id, 'completed'), 'Order completed')),
+        _Action(
+            'Mark as completed',
+            () => _run(() => orders.setStatus(order.id, 'completed'),
+                'Order completed')),
       if (order.status == 'pending' || order.status == 'accepted')
-        _Action('Reject request', () => _run(() => orders.setStatus(order.id, 'rejected'), 'Request rejected')),
+        _Action(
+            'Reject request',
+            () => _run(() => orders.setStatus(order.id, 'rejected'),
+                'Request rejected')),
     ]);
   }
 
@@ -157,9 +173,15 @@ class _OrdersScreenState extends State<OrdersScreen> {
     _showActions(item.title, [
       _Action('Edit listing', () async => nav.editItem(item)),
       if (item.status != 'sold')
-        _Action('Mark as sold', () => _run(() => items.setStatus(item.id, 'sold'), 'Marked as sold')),
+        _Action(
+            'Mark as sold',
+            () =>
+                _run(() => items.setStatus(item.id, 'sold'), 'Marked as sold')),
       if (item.status == 'sold')
-        _Action('Mark as available', () => _run(() => items.setStatus(item.id, 'available'), 'Listing is available again')),
+        _Action(
+            'Mark as available',
+            () => _run(() => items.setStatus(item.id, 'available'),
+                'Listing is available again')),
       _Action('Delete listing', () => _confirmDelete(item)),
     ]);
   }
@@ -173,8 +195,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
         title: const Text('Delete this listing?'),
         content: Text('"${item.title}" will be removed for everyone.'),
         actions: [
-          TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: const Text('Cancel')),
-          TextButton(onPressed: () => Navigator.of(dialogContext).pop(true), child: const Text('Delete')),
+          TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('Cancel')),
+          TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: const Text('Delete')),
         ],
       ),
     );
@@ -190,7 +216,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
         AppRow(
           onTap: () => _manageReceived(o),
           trailing: StatusBadge(capitalize(o.status)),
-          child: _rowText(o.itemTitle, 'Request from ${o.buyerName} · ${cash(o.priceAtOrder)}'),
+          child: _rowText(o.itemTitle,
+              'Request from ${o.buyerName} · ${cash(o.priceAtOrder)}'),
         ),
       for (final o in _buying)
         AppRow(
@@ -201,7 +228,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
       for (final i in _listings)
         AppRow(
           onTap: () => _manageListing(i),
-          trailing: StatusBadge(i.status == 'available' ? 'Published' : capitalize(i.status)),
+          trailing: StatusBadge(
+              i.status == 'available' ? 'Published' : capitalize(i.status)),
           child: _rowText(i.title, 'Selling · ${cash(i.price)}'),
         ),
     ];
@@ -212,7 +240,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     } else if (_error != null && rows.isEmpty) {
       list = ErrorRetry(message: _error!, onRetry: _load);
     } else if (rows.isEmpty) {
-      list = const Text(
+      list = Text(
         'Your buying requests and published listings will appear here.',
         style: TextStyle(color: AppColors.muted),
       );
@@ -227,8 +255,15 @@ class _OrdersScreenState extends State<OrdersScreen> {
         Panel(
           child: Column(
             children: [
-              AppRow(trailing: Text('${_buying.length}', style: const TextStyle(fontWeight: FontWeight.bold)), child: const Text('Buying requests')),
-              AppRow(last: true, trailing: Text('${_listings.length}', style: const TextStyle(fontWeight: FontWeight.bold)), child: const Text('My listings')),
+              AppRow(
+                  trailing: Text('${_buying.length}',
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  child: const Text('Buying requests')),
+              AppRow(
+                  last: true,
+                  trailing: Text('${_listings.length}',
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  child: const Text('My listings')),
             ],
           ),
         ),
@@ -243,7 +278,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
       children: [
         Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         const SizedBox(height: 5),
-        Text(meta, style: const TextStyle(fontSize: 10, color: AppColors.muted)),
+        Text(meta, style: TextStyle(fontSize: 10, color: AppColors.muted)),
       ],
     );
   }

@@ -44,7 +44,9 @@ class _PostItemScreenState extends State<PostItemScreen> {
       _price.text = '${e.price}';
       _description.text = e.description;
       _categoryId = e.category.id;
-      if (kConditionOptions.contains(e.conditionLabel)) _condition = e.conditionLabel;
+      if (kConditionOptions.contains(e.conditionLabel)) {
+        _condition = e.conditionLabel;
+      }
     }
   }
 
@@ -79,9 +81,11 @@ class _PostItemScreenState extends State<PostItemScreen> {
     }
 
     final catalog = context.read<CatalogProvider>();
-    final categoryId = _categoryId ?? (catalog.categories.isEmpty ? null : catalog.categories.first.id);
+    final categoryId = _categoryId ??
+        (catalog.categories.isEmpty ? null : catalog.categories.first.id);
     if (categoryId == null) {
-      showToast('Categories could not be loaded. Check your connection and try again.');
+      showToast(
+          'Categories could not be loaded. Check your connection and try again.');
       catalog.loadCategories();
       return;
     }
@@ -120,7 +124,8 @@ class _PostItemScreenState extends State<PostItemScreen> {
       }
       await catalog.refresh();
       if (!mounted) return;
-      showToast(editing == null ? 'Your listing is published' : 'Listing updated');
+      showToast(
+          editing == null ? 'Your listing is published' : 'Listing updated');
       if (editing == null) {
         _title.clear();
         _price.clear();
@@ -141,17 +146,22 @@ class _PostItemScreenState extends State<PostItemScreen> {
   Widget build(BuildContext context) {
     final categories = context.watch<CatalogProvider>().categories;
     final editing = widget.editing != null;
-    final selected = _categoryId ?? (categories.isEmpty ? null : categories.first.id);
+    final selected =
+        _categoryId ?? (categories.isEmpty ? null : categories.first.id);
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(15, 15, 15, 20),
       children: [
-        SectionTitle(editing ? 'Edit item' : 'Post an item', editing ? 'Update your listing' : 'Reach student buyers'),
+        SectionTitle(editing ? 'Edit item' : 'Post an item',
+            editing ? 'Update your listing' : 'Reach student buyers'),
         Panel(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppTextField(controller: _title, label: 'Item name', hint: 'What are you selling?'),
+              AppTextField(
+                  controller: _title,
+                  label: 'Item name',
+                  hint: 'What are you selling?'),
               AppTextField(
                 controller: _price,
                 label: 'Price (UGX)',
@@ -160,9 +170,13 @@ class _PostItemScreenState extends State<PostItemScreen> {
               ),
               AppDropdown<int>(
                 label: 'Category',
-                value: selected != null && categories.any((c) => c.id == selected) ? selected : null,
+                value:
+                    selected != null && categories.any((c) => c.id == selected)
+                        ? selected
+                        : null,
                 options: [for (final Category c in categories) c.id],
-                optionLabel: (id) => categories.singleWhere((c) => c.id == id).name,
+                optionLabel: (id) =>
+                    categories.singleWhere((c) => c.id == id).name,
                 onChanged: (id) => setState(() => _categoryId = id),
               ),
               AppDropdown<String>(
@@ -170,7 +184,8 @@ class _PostItemScreenState extends State<PostItemScreen> {
                 value: _condition,
                 options: kConditionOptions,
                 optionLabel: (label) => label,
-                onChanged: (label) => setState(() => _condition = label ?? _condition),
+                onChanged: (label) =>
+                    setState(() => _condition = label ?? _condition),
               ),
               AppTextField(
                 controller: _description,
@@ -179,9 +194,10 @@ class _PostItemScreenState extends State<PostItemScreen> {
                 maxLines: 4,
                 keyboardType: TextInputType.multiline,
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(top: 12, bottom: 6),
-                child: Text('Add photos', style: TextStyle(color: AppColors.label, fontSize: 12)),
+                child: Text('Add photos',
+                    style: TextStyle(color: AppColors.label, fontSize: 12)),
               ),
               Container(
                 padding: const EdgeInsets.all(6),
@@ -192,14 +208,17 @@ class _PostItemScreenState extends State<PostItemScreen> {
                 ),
                 child: Row(
                   children: [
-                    AppButton(label: 'Choose file', secondary: true, onPressed: _pickPhoto),
+                    AppButton(
+                        label: 'Choose file',
+                        secondary: true,
+                        onPressed: _pickPhoto),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         _photo?.name ?? 'No file chosen',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: AppColors.muted, fontSize: 13),
+                        style: TextStyle(color: AppColors.muted, fontSize: 13),
                       ),
                     ),
                   ],
@@ -213,7 +232,7 @@ class _PostItemScreenState extends State<PostItemScreen> {
                 onPressed: _submit,
               ),
               const SizedBox(height: 14),
-              const Text(
+              Text(
                 'Your listing is visible to other students once it is published.',
                 style: TextStyle(fontSize: 11, color: AppColors.muted),
               ),
