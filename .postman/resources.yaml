@@ -6,6 +6,8 @@ localResources:
   collections:
     - ../backend/postman/CampusMart.postman_collection.json
 
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
 cloudResources:
   collections:
-    ../postman/collections/CampusMart API: 055aabf9-b11e-45fa-95a3-0d2cbdaeeff0
+    ../postman/collections/CampusMart API: 9e138373-e953-4559-8b78-32fa3c4e0c55

@@ -1,3 +1,4 @@
+
 """Settings. Every value can be overridden with an environment variable."""
 import os
 from pathlib import Path
@@ -6,15 +7,36 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-me-before-deploying")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "1440"))  # 24 hours
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "1440"))
 
-DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{BASE_DIR / 'campusmart.db'}")
+_raw_database_url = os.getenv(
+    "DATABASE_URL",
+    f"sqlite:///{BASE_DIR / 'campusmart.db'}"
+)
 
+if _raw_database_url.startswith("postgres://"):
+    DATABASE_URL = _raw_database_url.replace(
+        "postgres://", "postgresql+psycopg://", 1
+    )
+elif _raw_database_url.startswith("postgresql://"):
+    DATABASE_URL = _raw_database_url.replace(
+        "postgresql://", "postgresql+psycopg://", 1
+    )
+else:
+    DATABASE_URL = _raw_database_url
+
+# Local fallback storage. Supabase will handle production image storage.
 UPLOAD_DIR = Path(os.getenv("UPLOAD_DIR", str(BASE_DIR / "uploads")))
-MAX_UPLOAD_BYTES = 5 * 1024 * 1024  # 5 MB per photo
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
+MAX_UPLOAD_BYTES = 5 * 1024 * 1024
 PAGE_SIZE = 20
 
-# The first admin account is created automatically on startup (see seed.py).
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@campusmart.ug")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "Admin12345")
+
+# Supabase Storage configuration
+SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
+SUPABASE_SECRET_KEY = os.getenv("SUPABASE_SECRET_KEY", "")
+SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET", "product-images")
+SUPABASE_SERVICE_ROLE_JWT = os.getenv("SUPABASE_SERVICE_ROLE_JWT", "")
